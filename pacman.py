@@ -12,15 +12,16 @@ Exercises
 from random import choice
 from turtle import bgcolor, clear, up, goto, dot, update, ontimer, \
                    setup, hideturtle, tracer, listen, onkey, done, Turtle
+from freegames import floor, vector
 
-from  freegames import floor, vector
 
 # Initialize game state and main variables
-state = {'score': 0} # Score tracker
-path = Turtle(visible=False) # Turtle used to draw paths
-writer = Turtle(visible=False) # Turtle used to write the score
-aim = vector(5, 0) # Pacman's initial direction (moving right)
-pacman = vector(-40, -80)  # Pacman's initial position
+state = {'score': 0}  # Score tracker
+path = Turtle(visible=False)  # Turtle used to draw paths
+writer = Turtle(visible=False)  # Turtle used to write the score
+aim = vector(5, 0)  # Pacman's initial direction (moving right)
+pacman = vector(-40, 0)  # Pacman's initial position
+
 
 # Define the ghosts with their initial positions and directions
 ghosts = [
@@ -31,11 +32,13 @@ ghosts = [
     [vector(100, 80), vector(0, -5)],
     [vector(-180, 80), vector(-5, 0)],
 ]
-# Tile 
-# layout: 0 represents a wall 
-# 1 represents a path with a dot
-# 2 is an empty path
-# fmt: off
+
+
+#  Tile
+#  layout: 0 represents a wall
+#  1 represents a path with a dot
+#  2 is an empty path
+#  fmt: off
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -68,7 +71,7 @@ def square(x, y):
     path.down()
     path.begin_fill()
 
-    # Draw the four sides of the square
+    #  Draw the four sides of the square
     for count in range(4):
         path.forward(20)
         path.left(90)
@@ -101,8 +104,8 @@ def valid(point):
 
 def world():
     """Draw world using path."""
-    bgcolor('black') # Set the background color to black
-    path.color('blue') # Set the path color to blue (walls)
+    bgcolor('black')  # Set the background color to black
+    path.color('blue')  # Set the path color to blue (walls)
 
     # Iterate over the tiles and draw squares for paths and walls
     for index in range(len(tiles)):
@@ -121,10 +124,10 @@ def world():
 
 def move():
     """Move pacman and all ghosts."""
-    writer.undo() # Erase previous score
-    writer.write(state['score']) # Update score
+    writer.undo()  # Erase previous score
+    writer.write(state['score'])  # Update score
 
-    clear() # Clear the screen
+    clear()  # Clear the screen
 
     # Move Pacman if the next position is valid (no wall)
     if valid(pacman + aim):
@@ -162,7 +165,7 @@ def move():
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
 
-    update() # Refresh the screen
+    update()  # Refresh the screen
 
     for point, course in ghosts:
         if abs(pacman - point) < 20:
@@ -177,6 +180,7 @@ def change(x, y):
         aim.x = x
         aim.y = y
 
+
 # Set up the game window
 setup(420, 420, 370, 0)
 hideturtle()
@@ -184,7 +188,8 @@ tracer(False)
 writer.goto(160, 160)
 writer.color('white')
 writer.write(state['score'])
-listen() # Listen for keyboard inputs
+listen()  # Listen for keyboard inputs
+
 
 # Bind arrow keys to change pacman's direction
 onkey(lambda: change(5, 0), 'Right')
@@ -192,7 +197,8 @@ onkey(lambda: change(-5, 0), 'Left')
 onkey(lambda: change(0, 5), 'Up')
 onkey(lambda: change(0, -5), 'Down')
 
+
 # Draw the world and start the game loop
 world()
 move()
-done() # Finish the game
+done()  # Finish the game

@@ -48,7 +48,7 @@ def drawx(x, y, size=60):
 
 
 def drawo(x, y, size=60):
-    """Draw O player."""
+    """Draw O player ."""
     # Set color for the circle
     color('green')
     # Move to starting point to draw the circle

@@ -15,6 +15,9 @@ from turtle import color
 
 from freegames import line
 
+# Set to store the coordinates of occupied cells
+taken_positions = set()
+
 
 def grid():
     """Draw tic-tac-toe grid."""
@@ -30,6 +33,8 @@ def drawx(x, y):
     color('red')
     line(x, y, x + 133, y + 133)
     line(x, y + 133, x + 133, y)
+    # Add the cell coordinates to the set of occupied cells
+    taken_positions.add((x, y))
 
 
 def drawo(x, y):
@@ -40,6 +45,8 @@ def drawo(x, y):
     goto(x + 67, y + 5)
     down()
     circle(62)
+    # Add the cell coordinates to the set of occupied cells
+    taken_positions.add((x, y))
 
 
 def floor(value):
@@ -55,6 +62,11 @@ def tap(x, y):
     """Draw X or O in tapped square."""
     x = floor(x)
     y = floor(y)
+    # Check if the selected cell is already occupied
+    if (x, y) in taken_positions:
+        print("Oh no, the box is occupied")
+        return
+    # Determine the current player and draw the corresponding symbol
     player = state['player']
     draw = players[player]
     draw(x, y)

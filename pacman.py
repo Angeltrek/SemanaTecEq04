@@ -20,7 +20,7 @@ state = {'score': 0}  # Score tracker
 path = Turtle(visible=False)  # Turtle used to draw paths
 writer = Turtle(visible=False)  # Turtle used to write the score
 aim = vector(5, 0)  # Pacman's initial direction (moving right)
-pacman = vector(-40, -80)  # Pacman's initial position
+pacman = vector(-40, 0)  # Pacman's initial position
 
 
 # Define the ghosts with their initial positions and directions

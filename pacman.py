@@ -149,6 +149,7 @@ def move():
 
     # Move each ghost
     for point, course in ghosts:
+        move_ghost_smart(point, course)
         if valid(point + course):
             point.move(course)
         else:
@@ -216,6 +217,22 @@ def bfs(start, goal):
                 parents[neighbor] = current
 
     return []  # Return an empty list if no path was found
+
+
+def move_ghost_smart(ghost, course):
+    """Mueve el fantasma de manera inteligente hacia Pacman."""
+    path_to_pacman = bfs(vector(int(ghost.x), int(ghost.y)),
+                         vector(int(pacman.x), int(pacman.y)))
+    if path_to_pacman:
+        next_step = path_to_pacman[0]
+        course.x = next_step.x - ghost.x
+        course.y = next_step.y - ghost.y
+    else:
+        options = [vector(20, 0), vector(-20, 0),
+                   vector(0, 20), vector(0, -20)]
+        plan = choice(options)
+        course.x = plan.x
+        course.y = plan.y
 
 
 # Set up the game window

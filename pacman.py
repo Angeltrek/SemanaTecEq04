@@ -28,6 +28,8 @@ ghosts = [
     [vector(-180, -160), vector(0, 5)],
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(-5, 0)],
+    [vector(100, 80), vector(0, -5)],
+    [vector(-180, 80), vector(-5, 0)],
 ]
 # Tile 
 # layout: 0 represents a wall 

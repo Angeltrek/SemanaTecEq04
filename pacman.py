@@ -10,6 +10,7 @@ Exercises
 """
 
 from random import choice
+from collections import deque
 from turtle import bgcolor, clear, up, goto, dot, update, ontimer, \
                    setup, hideturtle, tracer, listen, onkey, done, Turtle
 from freegames import floor, vector
@@ -171,7 +172,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 100)
+    ontimer(move, 150)
 
 
 def change(x, y):
@@ -179,6 +180,42 @@ def change(x, y):
     if valid(pacman + vector(x, y)):
         aim.x = x
         aim.y = y
+
+
+def bfs(start, goal):
+    """Find the shortest path for the ghost to reach Pacman using BFS."""
+    queue = deque([tuple(start)])
+    visited = set([tuple(start)])
+    # Dictionary to store parent nodes for path reconstruction
+    parents = {}
+    # Possible movement directions: right, left, up, and down
+    directions = [vector(20, 0), vector(-20, 0),
+                  vector(0, 20), vector(0, -20)]
+    # Continue until there are no more nodes in the queue
+    while queue:
+        current = queue.popleft()  # Dequeue the first element
+
+        if current == tuple(goal):
+            path = []
+            # Reconstruct the path by backtracking from the goal to the start
+            while current in parents:
+                path.append(vector(*current))
+                current = parents[current]
+            path.reverse()  # Reverse the path to get it from start to goal
+            return path
+
+        # Explore all possible neighbors in the four directions
+        for direction in directions:
+            neighbor = (current[0] + direction.x, current[1] + direction.y)
+            if (valid(vector(neighbor[0], neighbor[1]))
+                    and neighbor not in visited):
+                # Mark the neighbor as visited and add it to the queue
+                visited.add(neighbor)
+                queue.append(neighbor)
+                # Store the current node as the parent of the neighbor
+                parents[neighbor] = current
+
+    return []  # Return an empty list if no path was found
 
 
 # Set up the game window

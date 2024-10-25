@@ -8,11 +8,11 @@ Exercises
 4. How could you create a computer player?
 """
 
-# Adjusted the library
+# Importing specific functions from the turtle graphics library
 from turtle import up, goto, down, circle, update
 from turtle import setup, hideturtle, tracer, onscreenclick, done
 from turtle import color
-
+# Importing the line function from the freegames library
 from freegames import line
 
 # Set to store the coordinates of occupied cells
@@ -27,24 +27,36 @@ def grid():
     line(-200, 67, 200, 67)
 
 
-def drawx(x, y):
+def drawx(x, y, size=60):
     """Draw X player."""
     # Set color for the cross
     color('red')
-    line(x, y, x + 133, y + 133)
-    line(x, y + 133, x + 133, y)
+    # Move to starting point to draw the first diagonal line of the X
+    up()
+    goto(x - size / 2, y - size / 2)
+    down()
+    # Draw first line of the X
+    goto(x + size / 2, y + size / 2)
+    # Move to starting point for the second diagonal line of the X
+    up()
+    goto(x + size / 2, y - size / 2)
+    down()
+    # Draw second line of the X
+    goto(x - size / 2, y + size / 2)
     # Add the cell coordinates to the set of occupied cells
     taken_positions.add((x, y))
 
 
-def drawo(x, y):
+def drawo(x, y, size=60):
     """Draw O player."""
     # Set color for the circle
     color('green')
+    # Move to starting point to draw the circle
     up()
-    goto(x + 67, y + 5)
+    goto(x, y - size / 2)
     down()
-    circle(62)
+    # Draw the circle with specified size
+    circle(size / 2)
     # Add the cell coordinates to the set of occupied cells
     taken_positions.add((x, y))
 
@@ -54,14 +66,17 @@ def floor(value):
     return ((value + 200) // 133) * 133 - 200
 
 
+# Dictionary to keep track of the current player (0 for X, 1 for O)
 state = {'player': 0}
+# List of functions to draw X and O, respectively
 players = [drawx, drawo]
 
 
 def tap(x, y):
     """Draw X or O in tapped square."""
-    x = floor(x)
-    y = floor(y)
+    # Align the tapped coordinates with the nearest grid cell
+    x = round(x / 133) * 133
+    y = round(y / 133) * 133
     # Check if the selected cell is already occupied
     if (x, y) in taken_positions:
         print("Oh no, the box is occupied")
@@ -70,14 +85,23 @@ def tap(x, y):
     player = state['player']
     draw = players[player]
     draw(x, y)
+    # Update the screen to reflect changes
     update()
+    # Switch to the other player for the next turn
     state['player'] = not player
 
 
+# Set up the drawing window with specific size and position
 setup(420, 420, 370, 0)
+# Hide the turtle to avoid showing the cursor
 hideturtle()
+# Disable automatic drawing updates for better performance
 tracer(False)
+# Draw the initial grid
 grid()
+# Update the screen to display the grid
 update()
+# Set up the screen to call the tap function when clicked
 onscreenclick(tap)
+# Keep the window open
 done()

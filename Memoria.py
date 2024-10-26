@@ -1,4 +1,3 @@
-# Necessary module imports
 from random import shuffle
 from turtle import Screen, Turtle, ontimer, onscreenclick, addshape, clear, update, setup, shape, tracer, done, goto, stamp, up, down, color, write, hideturtle
 from freegames import path
@@ -8,7 +7,7 @@ car = path('car.gif')  # Path to the car image
 tiles = list(range(32)) * 2  # Creates a list with 32 pairs of numbers
 state = {'mark': None}  # State to save the marked position
 hide = [True] * 64  # List that defines if the tiles are hidden
-
+taps = 0  # Counter for taps
 
 def square(x, y):
     """Draws a white square with a black border at position (x, y)."""
@@ -22,19 +21,18 @@ def square(x, y):
         left(90)
     end_fill()
 
-
 def index(x, y):
     """Converts (x, y) coordinates into a tile index."""
     return int((x + 200) // 50 + ((y + 200) // 50) * 8)
-
 
 def xy(count):
     """Converts the tile index into (x, y) coordinates."""
     return (count % 8) * 50 - 200, (count // 8) * 50 - 200
 
-
 def tap(x, y):
     """Updates the marked tile and hidden tile status based on tap."""
+    global taps
+    taps += 1  # Increment taps count
     spot = index(x, y)  # Gets the tile index
     mark = state['mark']  # Gets the currently marked tile
 
@@ -46,13 +44,12 @@ def tap(x, y):
         hide[mark] = False
         state['mark'] = None  # Resets the marked tile
 
-
 def draw():
-    """Draws the background image and tiles on the screen."""
-    clear()  # Clears the screen
-    goto(0, 0)  # Positions at the center
-    shape(car)  # Sets the car image
-    stamp()  # Stamps the car image
+    """Draws the background image, tiles, and displays tap count."""
+    clear()
+    goto(0, 0)
+    shape(car)
+    stamp()
 
     # Draws all 8x8 tiles
     for count in range(64):
@@ -70,9 +67,12 @@ def draw():
         color('black')
         write(tiles[mark], font=('Arial', 30, 'normal'))
 
+    # Display tap count in the top left
+    goto(-180, 180)
+    write(f'Taps: {taps}', font=('Arial', 16, 'normal'))
+
     update()  # Updates the screen
     ontimer(draw, 100)  # Redraws every 100 ms
-
 
 # Initial setup
 shuffle(tiles)  # Shuffles the tiles

@@ -45,7 +45,7 @@ def tap(x, y):
         state['mark'] = None  # Resets the marked tile
 
 def draw():
-    """Draws the background image, tiles, and displays tap count."""
+    """Draws the background image, tiles, and displays tap count and completion message."""
     clear()
     goto(0, 0)
     shape(car)
@@ -71,6 +71,14 @@ def draw():
     goto(-180, 180)
     write(f'Taps: {taps}', font=('Arial', 16, 'normal'))
 
+    # Check if the game is completed
+    if all(not hidden for hidden in hide):
+        goto(0, 0)
+        color('green')
+        write("Juego completado!", align="center", font=('Arial', 30, 'bold'))
+        update()
+        return
+
     update()  # Updates the screen
     ontimer(draw, 100)  # Redraws every 100 ms
 
@@ -83,3 +91,4 @@ tracer(False)  # Turns off the drawing animation
 onscreenclick(tap)  # Calls the tap function on click
 draw()  # Calls the draw function
 done()  # Ends the program when the window is closed
+
